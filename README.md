@@ -16,7 +16,6 @@ This project is a desktop application designed to manage orders and invoices for
 
 *   **Programming Language:** Java
 *   **Database:** MySQL
-*   **IDE:** IntelliJ IDEA (or any IDE capable of building Java projects)
 
 ## Project Structure
 
@@ -41,7 +40,7 @@ Follow these steps to set up the project locally:
 
 ### 1. Prerequisites
 
-*   **Java Development Kit (JDK):** Make sure you have Java 11 or higher installed on your system. You can download it from [Oracle's website](https://www.oracle.com/java/technologies/downloads/) or use an OpenJDK distribution.
+*   **Java Development Kit (JDK):** Make sure you have Java 11 or higher installed on your system. You can download it from [Oracle's website](https://www.oracle.com/java/technologies/downloads/).
 *   **MySQL Database:** You need to have MySQL server installed and running. You can download it from the [MySQL website](https://dev.mysql.com/downloads/mysql/).
 
 ### 2. Clone the Repository
