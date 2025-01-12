@@ -22,13 +22,13 @@ This project is a desktop application designed to manage orders and invoices for
 The project is organized using a layered architecture:
 
 
+*   **`src/`**:
+*    *`database`:* Contains the `DatabaseConnection.java` file, responsible for establishing a connection to the MySQL database.
+*    *`models`:* Data model classes representing entities in the database (e.g., `Product`, `Client`, `Invoice`, `Command`, `LineItem`).
+*    *`dao`:* Data Access Object classes responsible for interacting with the database (e.g., `ProductDAO`, `ClientDAO`, `InvoiceDAO`, `CommandDAO`).
+*    *`services`:* Classes containing the business logic of the application, acting as an intermediary between the UI and DAOs (e.g., `ProductService`, `ClientService`, `InvoiceService`, `CommandService`).
+*    *`ui`:* This folder will hold the JavaFX user interface related code.
 
-*   **`database`:** Contains the `DatabaseConnection.java` file, responsible for establishing a connection to the MySQL database.
-*   **`models`:** Data model classes representing entities in the database (e.g., `Product`, `Client`, `Invoice`, `Command`, `LineItem`).
-*   **`dao`:** Data Access Object classes responsible for interacting with the database (e.g., `ProductDAO`, `ClientDAO`, `InvoiceDAO`, `CommandDAO`).
-*   **`services`:** Classes containing the business logic of the application, acting as an intermediary between the UI and DAOs (e.g., `ProductService`, `ClientService`, `InvoiceService`, `CommandService`).
-*   **`ui`:** This folder will hold the JavaFX user interface related code.
-*   **`main`:** This folder will hold the `Main` class that will bootstrap the JavaFX application.
 *   **`UML`:** (Optional) Contains UML diagrams if you made them.
 *   **`lib`:**  Contains external library `.jar` files. Currently containing the MySQL Connector/J library (`mysql-connector-java.jar`).
 *   **`export`:** Contains export files such as PDFs and CSVs.
