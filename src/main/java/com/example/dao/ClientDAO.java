@@ -5,7 +5,7 @@ import com.example.models.Client;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-//The main idea here is that we are injecting the Database Connection into the DAO's using the constructor
+
 public class ClientDAO {
 
     private final DatabaseConnection dbConnection;
