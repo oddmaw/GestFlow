@@ -4,6 +4,8 @@ import com.example.database.DatabaseConnection;
 import com.example.models.Command;
 import com.example.models.LineItem;
 
+import javafx.collections.FXCollections;
+
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -128,7 +130,7 @@ public class CommandDAO {
         command.setIdCommande(resultSet.getInt("idCommande"));
         command.setDate(resultSet.getObject("date", LocalDateTime.class));
         command.setIdClient(resultSet.getInt("idClient"));
-        command.setLineItems(getLineItems(command.getIdCommande(), connection));
+        command.setLineItems(FXCollections.observableArrayList(getLineItems(command.getIdCommande(), connection)));
         return command;
     }
 
