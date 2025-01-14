@@ -17,12 +17,12 @@ public class ClientManagementUI {
     private static ClientService clientService;
 
     public static void setClientService(ClientService service) {
-        clientService = service;
+        ClientManagementUI.clientService = service;
     }
 
     public static BorderPane getUI() {
         BorderPane root = new BorderPane();
-        root.setPadding(new Insets(10)); // Add padding around the content
+        root.setPadding(new Insets(10));
 
         TableView<Client> clientTable = new TableView<>();
         TableColumn<Client, Integer> idColumn = new TableColumn<>("ID");
@@ -40,11 +40,10 @@ public class ClientManagementUI {
         clientTable.getColumns().addAll(idColumn, nameColumn, emailColumn, phoneColumn);
         root.setCenter(clientTable);
 
-
         GridPane form = new GridPane();
         form.setHgap(10);
         form.setVgap(10);
-        form.setPadding(new Insets(10)); // Add padding to the form
+        form.setPadding(new Insets(10));
 
         TextField nameField = new TextField();
         TextField emailField = new TextField();
@@ -64,13 +63,23 @@ public class ClientManagementUI {
 
 
         HBox buttonBox = new HBox(10, addButton, updateButton, deleteButton);
-        buttonBox.setPadding(new Insets(0, 0, 10, 0)); // Add padding to button box
-        VBox formBox = new VBox(10, form, buttonBox); // Wrap form and buttons in a VBox
+        buttonBox.setPadding(new Insets(0, 0, 10, 0));
+
+        VBox formBox = new VBox(10, form, buttonBox);
         root.setBottom(formBox);
 
         ObservableList<Client> clientList = FXCollections.observableArrayList();
         clientTable.setItems(clientList);
         loadClients(clientList);
+
+
+        clientTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                nameField.setText(newSelection.getNom());
+                emailField.setText(newSelection.getEmail());
+                phoneField.setText(newSelection.getTelephone());
+            }
+        });
 
         addButton.setOnAction(e -> {
             String name = nameField.getText();
@@ -98,6 +107,7 @@ public class ClientManagementUI {
                 try {
                     clientService.updateClient(selectedClient);
                     loadClients(clientList);
+                    clientTable.refresh();
                     nameField.clear();
                     emailField.clear();
                     phoneField.clear();
@@ -114,12 +124,16 @@ public class ClientManagementUI {
                 try {
                     clientService.deleteClient(selectedClient.getIdClient());
                     loadClients(clientList);
+                    nameField.clear();
+                    emailField.clear();
+                    phoneField.clear();
                 } catch (SQLException ex) {
                     showAlert("SQL Error", "Error while deleting client" + ex.getMessage());
                 }
             } else {
                 showAlert("No Selection", "Please select a client to delete.");
             }
+            clientTable.getSelectionModel().clearSelection();
         });
         return root;
     }

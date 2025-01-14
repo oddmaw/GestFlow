@@ -17,15 +17,16 @@ public class ProductManagementUI {
     private static ProductService productService;
 
     public static void setProductService(ProductService service) {
-        productService = service;
+        ProductManagementUI.productService = service;
     }
 
     public static BorderPane getUI() {
         BorderPane root = new BorderPane();
-        root.setPadding(new Insets(10)); // Add padding around the content
+        root.setPadding(new Insets(10));
 
-        // TableView to display products
+        // Display products
         TableView<Product> productTable = new TableView<>();
+
         TableColumn<Product, Integer> idColumn = new TableColumn<>("ID");
         idColumn.setCellValueFactory(cellData -> cellData.getValue().idProduitProperty().asObject());
 
@@ -41,11 +42,11 @@ public class ProductManagementUI {
         productTable.getColumns().addAll(idColumn, nameColumn, priceColumn, stockColumn);
         root.setCenter(productTable);
 
-        // Form for product details
+
         GridPane form = new GridPane();
         form.setHgap(10);
         form.setVgap(10);
-        form.setPadding(new Insets(10)); // Add padding to the form
+        form.setPadding(new Insets(10));
 
         TextField nameField = new TextField();
         TextField priceField = new TextField();
@@ -58,24 +59,33 @@ public class ProductManagementUI {
         form.add(new Label("Stock:"), 0, 2);
         form.add(stockField, 1, 2);
 
-        // Buttons for actions
+        // Buttons
         Button addButton = new Button("Add");
         Button updateButton = new Button("Update");
         Button deleteButton = new Button("Delete");
-        HBox buttonBox = new HBox(10, addButton, updateButton, deleteButton);
-        buttonBox.setPadding(new Insets(0, 0, 10, 0)); // Add padding to button box
 
-        VBox formBox = new VBox(10, form, buttonBox); // Wrap form and buttons in a VBox
+        HBox buttonBox = new HBox(10, addButton, updateButton, deleteButton);
+        buttonBox.setPadding(new Insets(0, 0, 10, 0));
+
+        VBox formBox = new VBox(10, form, buttonBox);
 
         root.setBottom(formBox);
 
 
-        // Observable list for managing product data
         ObservableList<Product> productList = FXCollections.observableArrayList();
         productTable.setItems(productList);
         loadProducts(productList);
 
-        // Event handling
+
+        productTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                nameField.setText(newSelection.getNom());
+                priceField.setText(String.valueOf(newSelection.getPrix()));
+                stockField.setText(String.valueOf(newSelection.getQuantiteEnStock()));
+            }
+        });
+
+
         addButton.setOnAction(e -> {
             try {
                 String name = nameField.getText();
@@ -105,6 +115,7 @@ public class ProductManagementUI {
                     selectedProduct.setQuantiteEnStock(Integer.parseInt(stockField.getText()));
                     productService.updateProduct(selectedProduct);
                     loadProducts(productList);
+                    productTable.refresh();
                     nameField.clear();
                     priceField.clear();
                     stockField.clear();
@@ -124,13 +135,18 @@ public class ProductManagementUI {
                 try {
                     productService.deleteProduct(selectedProduct.getIdProduit());
                     loadProducts(productList);
+                    nameField.clear();
+                    priceField.clear();
+                    stockField.clear();
                 } catch (SQLException ex) {
                     showAlert("SQL Error", "Error while deleting product" + ex.getMessage());
                 }
             } else {
                 showAlert("No Selection", "Please select a product to delete.");
             }
+            productTable.getSelectionModel().clearSelection();
         });
+
         return root;
     }
 
