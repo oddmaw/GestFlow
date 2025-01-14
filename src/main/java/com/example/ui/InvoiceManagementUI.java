@@ -228,10 +228,21 @@ public class InvoiceManagementUI {
                 newInvoice.setMontantTotal(total);
                 newInvoice.setLineItems(lineItems);
                 try {
+                    int totalQuantity = 0;
+                    for (LineItem item : lineItems) {
+                        totalQuantity += item.getQuantity();
+                    }
+                    if (totalQuantity >= 10) {
+                        newInvoice.setMontantTotal(newInvoice.getMontantTotal() - newInvoice.getMontantTotal() * 0.3);
+                    }
                     invoiceService.addInvoice(newInvoice);
                     loadInvoices(invoiceList);
                     clearInvoiceForm(clientComboBox, productTableView, finalTotalLabel);
-                    showAlert("Success", "Invoice created successfully.");
+                    if (totalQuantity >= 10) {
+                        showAlert("Success", "Invoice created successfully (Discount 30% on the total cost).");
+                    } else {
+                        showAlert("Success", "Invoice created successfully.");
+                    }
                 } catch (SQLException ex) {
                     showAlert("SQL Error", "Error while creating invoice: " + ex.getMessage());
                 }
