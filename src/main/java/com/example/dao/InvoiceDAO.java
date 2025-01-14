@@ -11,12 +11,14 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class InvoiceDAO {
     private final DatabaseConnection dbConnection;
 
     public InvoiceDAO(DatabaseConnection dbConnection) {
         this.dbConnection = dbConnection;
     }
+
     public Invoice getInvoiceById(int id) throws SQLException {
         String query = "SELECT f.*, lf.idLigne, lf.idProduit, lf.quantite, lf.sousTotal " +
                 "FROM factures f LEFT JOIN lignes_facture lf ON f.idFacture = lf.idFacture " +
@@ -42,11 +44,9 @@ public class InvoiceDAO {
     }
 
     public List<Invoice> getAllInvoices() throws SQLException {
-        List<Invoice> invoices = new ArrayList<>();
         String query = "SELECT f.*, lf.idLigne, lf.idProduit, lf.quantite, lf.sousTotal " +
                 "FROM factures f LEFT JOIN lignes_facture lf ON f.idFacture = lf.idFacture";
         Map<Integer, Invoice> invoiceMap = new HashMap<>();
-
         try (Connection connection = dbConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query)) {
@@ -59,7 +59,6 @@ public class InvoiceDAO {
                     invoice.setLineItems(new ArrayList<>());
                     invoiceMap.put(invoiceId, invoice);
                 }
-
                 LineItem lineItem = mapLineItem(resultSet);
                 if (lineItem != null && lineItem.getIdProduct() != 0) {
                     invoice.getLineItems().add(lineItem);
@@ -69,13 +68,15 @@ public class InvoiceDAO {
         return new ArrayList<>(invoiceMap.values());
     }
 
+
     public int addInvoice(Invoice invoice) throws SQLException {
-        String query = "INSERT INTO factures (date, montantTotal, idClient) VALUES (?, ?, ?)";
+        String query = "INSERT INTO factures (date, montantTotal, idClient, totalDiscount) VALUES (?, ?, ?, ?)";
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setObject(1, invoice.getDate());
             statement.setDouble(2, invoice.getMontantTotal());
             statement.setInt(3, invoice.getIdClient());
+            statement.setDouble(4, invoice.getTotalDiscount());
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Creating invoice failed, no rows affected.");
@@ -149,12 +150,14 @@ public class InvoiceDAO {
         }
     }
 
+
     private Invoice mapInvoice(ResultSet resultSet) throws SQLException {
         Invoice invoice = new Invoice();
         invoice.setIdFacture(resultSet.getInt("idFacture"));
         invoice.setDate(resultSet.getObject("date", LocalDateTime.class));
         invoice.setMontantTotal(resultSet.getDouble("montantTotal"));
         invoice.setIdClient(resultSet.getInt("idClient"));
+        invoice.setTotalDiscount(resultSet.getDouble("totalDiscount"));
         return invoice;
     }
 

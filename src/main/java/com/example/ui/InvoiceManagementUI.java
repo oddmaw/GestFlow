@@ -35,9 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import com.itextpdf.text.DocumentException; // Added import
-
 public class InvoiceManagementUI {
     private static InvoiceService invoiceService;
     private static ClientService clientService;
@@ -67,7 +65,7 @@ public class InvoiceManagementUI {
         TableColumn<Invoice, LocalDateTime> dateColumn = new TableColumn<>("Date");
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         TableColumn<Invoice, Double> totalColumn = new TableColumn<>("Total");
-        totalColumn.setCellValueFactory(new PropertyValueFactory<>("montantTotal")); // Corrected typo
+        totalColumn.setCellValueFactory(new PropertyValueFactory<>("montantTotal"));
         TableColumn<Invoice, String> clientNameColumn = new TableColumn<>("Client");
         clientNameColumn.setCellValueFactory(cellData -> {
             try {
@@ -100,7 +98,6 @@ public class InvoiceManagementUI {
 
         Label clientLabel = new Label("Client:");
         ComboBox<Client> clientComboBox = new ComboBox<>();
-
         clientComboBox.setPromptText("Select a Client");
         clientComboBox.setCellFactory(lv -> new ListCell<Client>() {
             @Override
@@ -122,11 +119,11 @@ public class InvoiceManagementUI {
         productNameColumn.setCellValueFactory(cellData -> Bindings.concat(cellData.getValue().getProduct().getNom()));
         productNameColumn.setMinWidth(150);
 
+
         TableColumn<ProductWrapper, Integer> quantityColumn = new TableColumn<>("Quantity");
         quantityColumn.setCellValueFactory(cellData -> cellData.getValue().quantityProperty().asObject());
         quantityColumn.setPrefWidth(120);
         final Label finalTotalLabel = new Label("Total: 0.00");
-
         quantityColumn.setCellFactory(tc -> {
             TextFieldTableCell<ProductWrapper, Integer> cell = new TextFieldTableCell<>(new IntegerStringConverter());
             cell.focusedProperty().addListener((obs, oldVal, newVal) -> {
@@ -157,10 +154,19 @@ public class InvoiceManagementUI {
         productTableView.setItems(FXCollections.observableArrayList());
         loadProductsForSelection(productTableView);
         productTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        HBox totalBox = new HBox(10,finalTotalLabel);
+
+        HBox totalBox = new HBox(10, finalTotalLabel);
         totalBox.setAlignment(Pos.BOTTOM_LEFT);
 
-        // Buttons
+        // Discount
+        HBox discountBox = new HBox(10);
+        discountBox.setAlignment(Pos.CENTER_LEFT);
+        Label discountLabel = new Label("Discount:");
+        TextField discountValueField = new TextField();
+        discountValueField.setPromptText("Discount Value");
+        discountBox.getChildren().addAll(discountLabel,  discountValueField);
+
+
         HBox buttonBox = new HBox(10);
         buttonBox.setAlignment(Pos.BOTTOM_LEFT);
         Button addButton = new Button("Create Invoice");
@@ -168,16 +174,16 @@ public class InvoiceManagementUI {
         Button clearButton = new Button("Clear");
         Button exportCsvButton = new Button("Export CSV");
         Button exportPdfButton = new Button("Export PDF");
-
         buttonBox.getChildren().addAll(addButton, deleteButton, clearButton, exportCsvButton, exportPdfButton);
+
 
         leftPanel.getChildren().addAll(new VBox(10, clientLabel, clientComboBox),
                 new VBox(10, productsLabel, productTableView),
+                discountBox,
                 totalBox,
                 buttonBox);
         root.setLeft(leftPanel);
         BorderPane.setMargin(leftPanel, new Insets(0, 10, 0, 0));
-
 
         final ObservableList<Invoice> invoiceList = FXCollections.observableArrayList();
         invoiceTable.setItems(invoiceList);
@@ -190,7 +196,6 @@ public class InvoiceManagementUI {
             }
         });
 
-        // Refresh data when tab is selected
         tab.setOnSelectionChanged(event ->{
             if(tab.isSelected()){
                 loadClients(clientComboBox);
@@ -210,6 +215,7 @@ public class InvoiceManagementUI {
         addButton.setOnAction(e -> {
             Client selectedClient = clientComboBox.getValue();
             ObservableList<ProductWrapper> selectedProductWrappers = productTableView.getItems().filtered(pw -> pw.getQuantity() > 0);
+            String discountValue = discountValueField.getText();
 
             if (selectedClient != null && !selectedProductWrappers.isEmpty()) {
                 Invoice newInvoice = new Invoice();
@@ -224,6 +230,20 @@ public class InvoiceManagementUI {
                     lineItem.setSousTotal(wrapper.getSubtotal());
                     total+=lineItem.getSousTotal();
                     lineItems.add(lineItem);
+                }
+
+                if(!discountValue.isEmpty()){
+                    try{
+                        double discount = Double.parseDouble(discountValue);
+                        total = total *(1-(discount/100));
+                        newInvoice.setMontantTotal(total);
+                        newInvoice.setTotalDiscount(discount);
+                    } catch(NumberFormatException ex){
+                        showAlert("Invalid Input", "Please use a valid number for discount.");
+                        return;
+                    }
+                } else {
+                    newInvoice.setTotalDiscount(0);
                 }
                 newInvoice.setMontantTotal(total);
                 newInvoice.setLineItems(lineItems);
@@ -246,7 +266,6 @@ public class InvoiceManagementUI {
                 } catch (SQLException ex) {
                     showAlert("SQL Error", "Error while creating invoice: " + ex.getMessage());
                 }
-
             } else {
                 showAlert("Missing Information", "Please select a client and at least one product with a quantity.");
             }
@@ -259,7 +278,6 @@ public class InvoiceManagementUI {
                 confirmation.setTitle("Confirmation");
                 confirmation.setHeaderText("Delete Invoice");
                 confirmation.setContentText("Are you sure you want to delete this invoice?");
-
                 Optional<ButtonType> result = confirmation.showAndWait();
                 if (result.isPresent() && result.get() == ButtonType.OK) {
                     try {
@@ -274,9 +292,7 @@ public class InvoiceManagementUI {
                 showAlert("No Selection", "Please select an invoice to delete.");
             }
         });
-
         clearButton.setOnAction(e -> clearInvoiceForm(clientComboBox, productTableView, finalTotalLabel));
-
         exportCsvButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Save Invoices CSV");
@@ -315,6 +331,7 @@ public class InvoiceManagementUI {
         updateTotalLabel(productTableView.getItems(), totalLabel);
     }
 
+
     private static void updateTotalLabel(ObservableList<ProductWrapper> products, Label totalLabel) {
         double total = products.stream()
                 .mapToDouble(ProductWrapper::getSubtotal)
@@ -322,7 +339,7 @@ public class InvoiceManagementUI {
         totalLabel.setText(String.format("Total: %.2f", total));
     }
 
-    private static void searchInvoices(String text, ObservableList<Invoice> invoiceList,String searchType) {
+    private static void searchInvoices(String text, ObservableList<Invoice> invoiceList, String searchType) {
         try {
             invoiceList.clear();
             List<Invoice> invoices = invoiceService.getAllInvoices();
@@ -334,7 +351,7 @@ public class InvoiceManagementUI {
                         if (client != null && client.getNom().toLowerCase().contains(text.toLowerCase())) {
                             match = true;
                         }
-                    } catch (SQLException ex){
+                    } catch(SQLException ex){
                         System.err.println("Error while getting client: " + ex.getMessage());
                     }
                 } else if (searchType.equals("Date")) {
@@ -346,7 +363,6 @@ public class InvoiceManagementUI {
                     invoiceList.add(invoice);
                 }
             }
-
         } catch (SQLException ex) {
             showAlert("SQL Error", "Error loading invoices: " + ex.getMessage());
         }
@@ -389,7 +405,6 @@ public class InvoiceManagementUI {
             this.quantity.addListener((obs, oldVal, newVal) -> updateSubtotal());
             updateSubtotal();
         }
-
         private void updateSubtotal() {
             this.subtotal.set(product.getPrix() * quantity.get());
         }
@@ -405,6 +420,7 @@ public class InvoiceManagementUI {
         public IntegerProperty quantityProperty() {
             return quantity;
         }
+
         public void setQuantity(int quantity) {
             this.quantity.set(quantity);
             updateSubtotal();
@@ -418,6 +434,8 @@ public class InvoiceManagementUI {
             return subtotal;
         }
     }
+
+
     private static class StringConverterClient extends StringConverter<Client> {
         @Override
         public String toString(Client client) {
@@ -432,6 +450,7 @@ public class InvoiceManagementUI {
             return null;
         }
     }
+
 
     private static void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

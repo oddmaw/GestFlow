@@ -13,3 +13,9 @@
 /Users/me/learning-java/GestFlow/src/main/java/com/example/services/CommandService.java
 /Users/me/learning-java/GestFlow/src/main/java/com/example/services/InvoiceService.java
 /Users/me/learning-java/GestFlow/src/main/java/com/example/services/ProductService.java
+/Users/me/learning-java/GestFlow/src/main/java/com/example/ui/ClientManagementUI.java
+/Users/me/learning-java/GestFlow/src/main/java/com/example/ui/CommandManagementUI.java
+/Users/me/learning-java/GestFlow/src/main/java/com/example/ui/InvoiceManagementUI.java
+/Users/me/learning-java/GestFlow/src/main/java/com/example/ui/ProductManagementUI.java
+/Users/me/learning-java/GestFlow/src/main/java/com/example/utils/CSVExporter.java
+/Users/me/learning-java/GestFlow/src/main/java/com/example/utils/PDFExporter.java

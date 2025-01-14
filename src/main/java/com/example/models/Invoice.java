@@ -10,24 +10,27 @@ public class Invoice {
     private final ObjectProperty<LocalDateTime> date = new SimpleObjectProperty<>();
     private final DoubleProperty montantTotal = new SimpleDoubleProperty();
     private final IntegerProperty idClient = new SimpleIntegerProperty();
+    private final DoubleProperty totalDiscount = new SimpleDoubleProperty();
     private List<LineItem> lineItems;
 
 
     public Invoice() {
     }
-    public Invoice(int idFacture, LocalDateTime date, double montantTotal, int idClient, List<LineItem> lineItems) {
+    public Invoice(int idFacture, LocalDateTime date, double montantTotal, int idClient, List<LineItem> lineItems, double totalDiscount) {
         this.idFacture.set(idFacture);
         this.date.set(date);
         this.montantTotal.set(montantTotal);
         this.idClient.set(idClient);
         this.lineItems = lineItems;
+        this.totalDiscount.set(totalDiscount);
     }
 
-    public Invoice(LocalDateTime date, double montantTotal, int idClient, List<LineItem> lineItems) {
+    public Invoice(LocalDateTime date, double montantTotal, int idClient, List<LineItem> lineItems, double totalDiscount) {
         this.date.set(date);
         this.montantTotal.set(montantTotal);
         this.idClient.set(idClient);
         this.lineItems = lineItems;
+        this.totalDiscount.set(totalDiscount);
     }
 
     public int getIdFacture() {
@@ -62,6 +65,15 @@ public class Invoice {
     public DoubleProperty montantTotalProperty() {
         return montantTotal;
     }
+    public double getTotalDiscount() {
+        return totalDiscount.get();
+    }
+    public void setTotalDiscount(double totalDiscount) {
+        this.totalDiscount.set(totalDiscount);
+    }
+    public DoubleProperty totalDiscountProperty() {
+        return totalDiscount;
+    }
 
     public int getIdClient() {
         return idClient.get();
@@ -90,6 +102,7 @@ public class Invoice {
                 ", montantTotal=" + montantTotal.get() +
                 ", idClient=" + idClient.get() +
                 ", lineItems=" + lineItems +
+                ", totalDiscount=" + totalDiscount.get() +
                 '}';
     }
 }
