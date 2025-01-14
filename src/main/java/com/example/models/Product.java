@@ -1,67 +1,83 @@
 package com.example.models;
 
-public class Product {
-    private int idProduit;
-    private String nom;
-    private double prix;
-    private int quantiteEnStock;
+import javafx.beans.property.*;
 
-    public Product() {
+public class Product {
+    private final IntegerProperty idProduit = new SimpleIntegerProperty();
+    private final StringProperty nom = new SimpleStringProperty();
+    private final DoubleProperty prix = new SimpleDoubleProperty();
+    private final IntegerProperty quantiteEnStock = new SimpleIntegerProperty();
+
+    public Product() {}
+
+    public Product(String nom, double prix, int quantiteEnStock) {
+        this.nom.set(nom);
+        this.prix.set(prix);
+        this.quantiteEnStock.set(quantiteEnStock);
     }
 
     public Product(int idProduit, String nom, double prix, int quantiteEnStock) {
-        this.idProduit = idProduit;
-        this.nom = nom;
-        this.prix = prix;
-        this.quantiteEnStock = quantiteEnStock;
-    }
-
-
-    public Product(String nom, double prix, int quantiteEnStock) {
-        this.nom = nom;
-        this.prix = prix;
-        this.quantiteEnStock = quantiteEnStock;
+        this.idProduit.set(idProduit);
+        this.nom.set(nom);
+        this.prix.set(prix);
+        this.quantiteEnStock.set(quantiteEnStock);
     }
 
     public int getIdProduit() {
-        return idProduit;
+        return idProduit.get();
     }
 
     public void setIdProduit(int idProduit) {
-        this.idProduit = idProduit;
+        this.idProduit.set(idProduit);
+    }
+
+    public IntegerProperty idProduitProperty() {
+        return idProduit;
     }
 
     public String getNom() {
-        return nom;
+        return nom.get();
     }
 
     public void setNom(String nom) {
-        this.nom = nom;
+        this.nom.set(nom);
+    }
+
+    public StringProperty nomProperty() {
+        return nom;
     }
 
     public double getPrix() {
-        return prix;
+        return prix.get();
     }
 
     public void setPrix(double prix) {
-        this.prix = prix;
+        this.prix.set(prix);
+    }
+
+    public DoubleProperty prixProperty() {
+        return prix;
     }
 
     public int getQuantiteEnStock() {
-        return quantiteEnStock;
+        return quantiteEnStock.get();
     }
 
     public void setQuantiteEnStock(int quantiteEnStock) {
-        this.quantiteEnStock = quantiteEnStock;
+        this.quantiteEnStock.set(quantiteEnStock);
+    }
+
+    public IntegerProperty quantiteEnStockProperty() {
+        return quantiteEnStock;
     }
 
     @Override
     public String toString() {
         return "Product{" +
-                "idProduit=" + idProduit +
-                ", nom='" + nom + '\'' +
-                ", prix=" + prix +
-                ", quantiteEnStock=" + quantiteEnStock +
+                "idProduit=" + idProduit.get() +
+                ", nom='" + nom.get() + '\'' +
+                ", prix=" + prix.get() +
+                ", quantiteEnStock=" + quantiteEnStock.get() +
                 '}';
     }
 }
