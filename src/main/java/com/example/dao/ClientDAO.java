@@ -1,7 +1,7 @@
-package dao;
+package com.example.dao;
 
-import database.DatabaseConnection;
-import models.Client;
+import com.example.database.DatabaseConnection;
+import com.example.models.Client;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,8 +1,8 @@
-package dao;
+package com.example.dao;
 
-import database.DatabaseConnection;
-import models.Invoice;
-import models.LineItem;
+import com.example.database.DatabaseConnection;
+import com.example.models.Invoice;
+import com.example.models.LineItem;
 
 import java.sql.*;
 import java.time.LocalDateTime;

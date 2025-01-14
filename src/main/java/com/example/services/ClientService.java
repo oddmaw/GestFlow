@@ -1,14 +1,14 @@
-package services;
+package com.example.services;
 
-import dao.ClientDAO;
-import models.Client;
+import com.example.dao.ClientDAO;
+import com.example.models.Client;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public class ClientService {
     private ClientDAO clientDAO;
-    
+
     public ClientService(ClientDAO clientDAO) {
         this.clientDAO = clientDAO;
     }

@@ -1,7 +1,7 @@
-package services;
+package com.example.services;
 
-import dao.ProductDAO;
-import models.Product;
+import com.example.dao.ProductDAO;
+import com.example.models.Product;
 import java.sql.SQLException;
 import java.util.List;
 

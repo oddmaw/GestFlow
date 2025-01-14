@@ -1,7 +1,7 @@
-package services;
+package com.example.services;
 
-import dao.InvoiceDAO;
-import models.Invoice;
+import com.example.dao.InvoiceDAO;
+import com.example.models.Invoice;
 
 import java.sql.SQLException;
 import java.util.List;
