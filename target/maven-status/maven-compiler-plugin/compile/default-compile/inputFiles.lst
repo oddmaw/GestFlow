@@ -1,0 +1,15 @@
+/Users/me/learning-java/GestFlow/src/main/java/com/example/Main.java
+/Users/me/learning-java/GestFlow/src/main/java/com/example/dao/ClientDAO.java
+/Users/me/learning-java/GestFlow/src/main/java/com/example/dao/CommandDAO.java
+/Users/me/learning-java/GestFlow/src/main/java/com/example/dao/InvoiceDAO.java
+/Users/me/learning-java/GestFlow/src/main/java/com/example/dao/ProductDAO.java
+/Users/me/learning-java/GestFlow/src/main/java/com/example/database/DatabaseConnection.java
+/Users/me/learning-java/GestFlow/src/main/java/com/example/models/Client.java
+/Users/me/learning-java/GestFlow/src/main/java/com/example/models/Command.java
+/Users/me/learning-java/GestFlow/src/main/java/com/example/models/Invoice.java
+/Users/me/learning-java/GestFlow/src/main/java/com/example/models/LineItem.java
+/Users/me/learning-java/GestFlow/src/main/java/com/example/models/Product.java
+/Users/me/learning-java/GestFlow/src/main/java/com/example/services/ClientService.java
+/Users/me/learning-java/GestFlow/src/main/java/com/example/services/CommandService.java
+/Users/me/learning-java/GestFlow/src/main/java/com/example/services/InvoiceService.java
+/Users/me/learning-java/GestFlow/src/main/java/com/example/services/ProductService.java
