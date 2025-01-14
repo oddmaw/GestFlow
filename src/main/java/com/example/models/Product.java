@@ -3,19 +3,22 @@ package com.example.models;
 import javafx.beans.property.*;
 
 public class Product {
-    private final IntegerProperty idProduit = new SimpleIntegerProperty();
-    private final StringProperty nom = new SimpleStringProperty();
-    private final DoubleProperty prix = new SimpleDoubleProperty();
-    private final IntegerProperty quantiteEnStock = new SimpleIntegerProperty();
+    private final SimpleIntegerProperty idProduit = new SimpleIntegerProperty();
+    private final SimpleStringProperty nom = new SimpleStringProperty();
+    private final SimpleDoubleProperty prix = new SimpleDoubleProperty();
+    private final SimpleIntegerProperty quantiteEnStock = new SimpleIntegerProperty();
 
+    // Default constructor
     public Product() {}
 
+    // Constructor without idProduit (used when the ID is auto-generated)
     public Product(String nom, double prix, int quantiteEnStock) {
         this.nom.set(nom);
         this.prix.set(prix);
         this.quantiteEnStock.set(quantiteEnStock);
     }
 
+    // Constructor with all fields
     public Product(int idProduit, String nom, double prix, int quantiteEnStock) {
         this.idProduit.set(idProduit);
         this.nom.set(nom);
@@ -23,6 +26,7 @@ public class Product {
         this.quantiteEnStock.set(quantiteEnStock);
     }
 
+    // Getter and setter for idProduit
     public int getIdProduit() {
         return idProduit.get();
     }
@@ -31,10 +35,11 @@ public class Product {
         this.idProduit.set(idProduit);
     }
 
-    public IntegerProperty idProduitProperty() {
+    public SimpleIntegerProperty idProduitProperty() {
         return idProduit;
     }
 
+    // Getter and setter for nom
     public String getNom() {
         return nom.get();
     }
@@ -43,10 +48,11 @@ public class Product {
         this.nom.set(nom);
     }
 
-    public StringProperty nomProperty() {
+    public SimpleStringProperty nomProperty() {
         return nom;
     }
 
+    // Getter and setter for prix
     public double getPrix() {
         return prix.get();
     }
@@ -55,10 +61,11 @@ public class Product {
         this.prix.set(prix);
     }
 
-    public DoubleProperty prixProperty() {
+    public SimpleDoubleProperty prixProperty() {
         return prix;
     }
 
+    // Getter and setter for quantiteEnStock
     public int getQuantiteEnStock() {
         return quantiteEnStock.get();
     }
@@ -67,7 +74,7 @@ public class Product {
         this.quantiteEnStock.set(quantiteEnStock);
     }
 
-    public IntegerProperty quantiteEnStockProperty() {
+    public SimpleIntegerProperty quantiteEnStockProperty() {
         return quantiteEnStock;
     }
 

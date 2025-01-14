@@ -1,72 +1,91 @@
 package com.example.models;
 
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class Command {
-    private int idCommande;
-    private LocalDateTime date;
-    private int idClient;
-    private List<LineItem> lineItems;
+    private final IntegerProperty idCommande = new SimpleIntegerProperty();
+    private final ObjectProperty<LocalDateTime> date = new SimpleObjectProperty<>();
+    private final IntegerProperty idClient = new SimpleIntegerProperty();
+    private final ListProperty<LineItem> lineItems = new SimpleListProperty<>(FXCollections.observableArrayList());
 
+    // Default Constructor
+    public Command() {}
 
-    public Command() {
+    // Constructor with all fields
+    public Command(int idCommande, LocalDateTime date, int idClient, ObservableList<LineItem> lineItems) {
+        this.idCommande.set(idCommande);
+        this.date.set(date);
+        this.idClient.set(idClient);
+        this.lineItems.set(lineItems);
     }
 
-
-    public Command(int idCommande, LocalDateTime date, int idClient, List<LineItem> lineItems) {
-        this.idCommande = idCommande;
-        this.date = date;
-        this.idClient = idClient;
-        this.lineItems = lineItems;
+    // Constructor without idCommande
+    public Command(LocalDateTime date, int idClient, ObservableList<LineItem> lineItems) {
+        this.date.set(date);
+        this.idClient.set(idClient);
+        this.lineItems.set(lineItems);
     }
 
-
-    public Command(LocalDateTime date, int idClient, List<LineItem> lineItems) {
-        this.date = date;
-        this.idClient = idClient;
-        this.lineItems = lineItems;
-    }
-
+    // Getters and Setters with Properties
     public int getIdCommande() {
-        return idCommande;
+        return idCommande.get();
     }
 
     public void setIdCommande(int idCommande) {
-        this.idCommande = idCommande;
+        this.idCommande.set(idCommande);
+    }
+
+    public IntegerProperty idCommandeProperty() {
+        return idCommande;
     }
 
     public LocalDateTime getDate() {
-        return date;
+        return date.get();
     }
 
     public void setDate(LocalDateTime date) {
-        this.date = date;
+        this.date.set(date);
+    }
+
+    public ObjectProperty<LocalDateTime> dateProperty() {
+        return date;
     }
 
     public int getIdClient() {
-        return idClient;
+        return idClient.get();
     }
 
     public void setIdClient(int idClient) {
-        this.idClient = idClient;
+        this.idClient.set(idClient);
     }
 
-    public List<LineItem> getLineItems() {
+    public IntegerProperty idClientProperty() {
+        return idClient;
+    }
+
+    public ObservableList<LineItem> getLineItems() {
+        return lineItems.get();
+    }
+
+    public void setLineItems(ObservableList<LineItem> lineItems) {
+        this.lineItems.set(lineItems);
+    }
+
+    public ListProperty<LineItem> lineItemsProperty() {
         return lineItems;
-    }
-
-    public void setLineItems(List<LineItem> lineItems) {
-        this.lineItems = lineItems;
     }
 
     @Override
     public String toString() {
         return "Command{" +
-                "idCommande=" + idCommande +
-                ", date=" + date +
-                ", idClient=" + idClient +
-                ", lineItems=" + lineItems +
+                "idCommande=" + idCommande.get() +
+                ", date=" + date.get() +
+                ", idClient=" + idClient.get() +
+                ", lineItems=" + lineItems.get() +
                 '}';
     }
 }
