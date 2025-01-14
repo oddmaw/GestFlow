@@ -1,90 +1,210 @@
-/* style.css */
-
-/* General theme */
+/* Color Variables */
 .root {
-    -fx-background-color: #2d3436; /* Dark background */
-    -fx-font-family: "Arial";
+    /* Light Theme Colors */
+    -fx-primary: #6366f1;                                       /* Solid primary for consistency */
+    -fx-primary-hover: #4f46e5;                                /* Darker primary for hover */
+    -fx-secondary: #22c55e;                                    /* Success */
+    -fx-warning: #eab308;                                      /* Warning */
+    -fx-danger: #ef4444;                                       /* Danger */
+    -fx-background: #ffffff;                                   /* Main background */
+    -fx-surface: #f8fafc;                                      /* Surface */
+    -fx-surface-hover: #f1f5f9;                                /* Hover state */
+    -fx-border: #cbd5e1;                                       /* Darker border for better visibility */
+    -fx-text: #0f172a;                                        /* Primary text */
+    -fx-text-secondary: #64748b;                              /* Secondary text */
+
+    -fx-background-color: -fx-background;
+    -fx-font-family: "Segoe UI", "SF Pro Display", "Inter", system-ui, sans-serif;
 }
 
-/* Tab Pane */
+/* Tab Pane Styling */
 .tab-pane *.tab-header-background {
-    -fx-background-color: #424949;
+    -fx-background-color: -fx-surface;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 2);
 }
 
-.tab-pane .tab-header-area .tab-header-background {
-    -fx-background-color: #424949; /* Darker background for tab header */
+.tab-pane .tab-header-area {
+    -fx-padding: 5 5 0 5;
 }
 
 .tab {
-    -fx-background-color: #424949; /* Dark color for tab */
+    -fx-background-color: transparent;
+    -fx-background-radius: 8 8 0 0;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
 }
 
 .tab:selected {
-    -fx-background-color: #3498db; /* Highlight when selected */
+    -fx-background-color: -fx-primary;
 }
 
 .tab-label {
+    -fx-text-fill: -fx-text-secondary;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.tab:selected .tab-label {
     -fx-text-fill: white;
 }
 
-/* TableView */
+/* Add these styles to modify the sort arrows */
+.table-view .column-header .sort-order-dot {
+    -fx-background-color: white;
+}
+
+.table-view .column-header .arrow {
+    -fx-background-color: white;
+}
+
+.table-view .column-header:hover .arrow {
+    -fx-background-color: white;
+}
+
+.table-view .column-header.sort-order-visible .arrow {
+    -fx-background-color: white;
+}
+/* TableView Light Theme Styling */
 .table-view {
-    -fx-background-color: #353b48;
-    -fx-control-inner-background: #353b48;
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-border-color: #34495e; /* Added border color */
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: -fx-border;
     -fx-border-width: 1;
+    -fx-padding: 0;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.table-view .column-header-background {
+    -fx-background-color: -fx-primary;
+    -fx-background-radius: 12 12 0 0;
+    -fx-padding: 5px 0;
 }
 
 .table-view .column-header-background .filler {
-    -fx-background-color: #424949; /* Darker column headers */
+    -fx-background-color: -fx-primary;
 }
 
 .table-view .column-header {
-    -fx-background-color: #424949; /* Darker column headers */
+    -fx-background-color: transparent;
+    -fx-size: 40px;
+    -fx-border-color: transparent;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.table-view .column-header .label {
     -fx-text-fill: white;
     -fx-font-weight: bold;
 }
 
-.table-view .table-row-cell:even {
-    -fx-background-color: #424949; /* Alternate row color for better readability */
-    -fx-text-fill: white;
+.table-view .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent -fx-border transparent -fx-border;
+    -fx-border-width: 1;
+    -fx-table-cell-border-color: transparent;
 }
 
 .table-view .table-row-cell:odd {
-    -fx-background-color: #353b48;
-    -fx-text-fill: white;
+    -fx-background-color: -fx-surface;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: derive(-fx-primary, 90%);
 }
 
 .table-view .table-cell {
-    -fx-text-fill: white;
+    -fx-text-fill: -fx-text;
+    -fx-alignment: center-left;
+    -fx-padding: 12 20;
+    -fx-font-size: 13px;
 }
 
-/* TextField */
+/* TextField Light Style with Improved Visibility */
 .text-field {
-    -fx-background-color: #424949;
-    -fx-text-fill: white;
-    -fx-prompt-text-fill: #bdc3c7;
-    -fx-font-size: 14px;
-    -fx-border-color: #34495e; /* Added border color */
+    -fx-background-color: white;
+    -fx-text-fill: -fx-text;
+    -fx-prompt-text-fill: -fx-text-secondary;
+    -fx-font-size: 13px;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: -fx-border;
     -fx-border-width: 1;
+    -fx-padding: 10 15;
 }
 
-/* Button */
+.text-field:focused {
+    -fx-border-color: -fx-primary;
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(99,102,241,0.2), 10, 0, 0, 2);
+}
+
+/* Label Light Style */
+.label {
+    -fx-text-fill: -fx-text;
+    -fx-font-size: 13px;
+}
+
+/* Enhanced Buttons */
 .button {
-    -fx-background-color: #3498db;
+    -fx-background-color: -fx-primary;
     -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-padding: 5 10 5 10;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 1);
 }
 
 .button:hover {
-    -fx-background-color: #2980b9;
+    -fx-background-color: -fx-primary-hover;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 12, 0, 0, 2);
 }
 
-/* Label */
-.label {
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
+.button:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 4, 0, 0, 1);
+}
+
+/* Specific Button Styles */
+.button.delete {
+    -fx-background-color: -fx-danger;
+}
+
+.button.update {
+    -fx-background-color: -fx-warning;
+}
+
+.button.add {
+    -fx-background-color: -fx-secondary;
+}
+
+/* ScrollBar Light Styling */
+.scroll-bar {
+    -fx-background-color: -fx-surface;
+    -fx-background-radius: 8;
+}
+
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: -fx-text-secondary;
+    -fx-background-radius: 8;
+    -fx-opacity: 0.3;
+}
+
+.scroll-bar:vertical .thumb:hover,
+.scroll-bar:horizontal .thumb:hover {
+    -fx-opacity: 0.5;
+}
+
+/* Selection Colors */
+.table-view:focused {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.table-row-cell:selected .table-cell {
+    -fx-text-fill: -fx-primary;
 }
