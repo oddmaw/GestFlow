@@ -22,43 +22,40 @@ This project is a desktop application designed to manage orders and invoices. It
 The project is organized using a layered architecture:
 
 ```
-OrderManagementSystem/
-│
-├── src/                             (Source code directory)
-│   ├── database/                    (Database-related classes)
-│   │   └── DatabaseConnection.java  (Handles database connection)
-│   │
-│   ├── models/                      (Data model classes)
-│   │   ├── Product.java             (Product data class)
-│   │   ├── Client.java              (Client data class)
-│   │   ├── Invoice.java             (Invoice data class)
-│   │   ├── Command.java             (Command/Order data class)
-│   │   └── LineItem.java            (Line item data class)
-│   │
-│   ├── dao/                         (Data Access Object classes)
-│   │   ├── ProductDAO.java          (Handles product data access)
-│   │   ├── ClientDAO.java           (Handles client data access)
-│   │   ├── InvoiceDAO.java          (Handles invoice data access)
-│   │   └── CommandDAO.java          (Handles command/order data access)
-│   │
-│   ├── services/                    (Business logic classes)
-│   │   ├── ProductService.java      (Business logic for products)
-│   │   ├── ClientService.java       (Business logic for clients)
-│   │   ├── InvoiceService.java      (Business logic for invoices)
-│   │   └── CommandService.java      (Business logic for commands)
-│   │
-│   ├── ui/                          (User Interface classes - TO BE IMPLEMENTED WITH JavaFX)
-│   │   └── ...(JavaFX Files will be created here)
-│   │
-│   └── main/                        (Main class - TO BE IMPLEMENTED)
-│       └── Main.java                (Application entry point - TO BE IMPLEMENTED)
-│
-├── database/                        (Database configuration)
-├── UML/                             (UML Diagrams - Optional)
-├── lib/                             (Libraries)
-│   └── mysql-connector-java.jar     (MySQL Connector/J library)
-├── export/                          (Export folder)
-└── README.md                        (Project Documentation)
+src
+└── main
+    ├── java
+    │   └── com
+    │       └── example
+    │           ├── Main.java
+    │           ├── dao
+    │           │   ├── ClientDAO.java
+    │           │   ├── CommandDAO.java
+    │           │   ├── InvoiceDAO.java
+    │           │   └── ProductDAO.java
+    │           ├── database
+    │           │   └── DatabaseConnection.java
+    │           ├── models
+    │           │   ├── Client.java
+    │           │   ├── Command.java
+    │           │   ├── Invoice.java
+    │           │   ├── LineItem.java
+    │           │   └── Product.java
+    │           ├── services
+    │           │   ├── ClientService.java
+    │           │   ├── CommandService.java
+    │           │   ├── InvoiceService.java
+    │           │   └── ProductService.java
+    │           ├── ui
+    │           │   ├── ClientManagementUI.java
+    │           │   ├── CommandManagementUI.java
+    │           │   ├── InvoiceManagementUI.java
+    │           │   └── ProductManagementUI.java
+    │           └── utils
+    │               ├── CSVExporter.java
+    │               └── PDFExporter.java
+    └── resources
+        └── style.css
 ```
 
 - **`database`:** Contains the `DatabaseConnection.java` file, responsible for establishing a connection to the MySQL database.
@@ -80,6 +77,7 @@ Follow these steps to set up the project locally:
 ### 1. Prerequisites
 
 - **Java Development Kit (JDK):** Make sure you have Java 11 or higher installed on your system. You can download it from [Oracle's website](https://www.oracle.com/java/technologies/downloads/).
+- **Java FX:** Make sure to add it [Java FX's website](https://openjfx.io/).
 - **MySQL Database:** You need to have MySQL server installed and running. You can download it from the [MySQL website](https://dev.mysql.com/downloads/mysql/).
 
 ### 2. Clone the Repository
@@ -175,9 +173,13 @@ git clone https://github.com/oddmaw/GestFlow.git
     ```
 
 
-### 5. (TO DO) Implement JavaFX UI
+### 5. Implement JavaFX UI
 
-The application currently lacks the UI layer. Proceed to implement JavaFX views using FXML and controller classes as discussed earlier.
+If you use maven run the command
+
+```bash
+mvn exec:java -Dexec.mainClass="com.example.Main"
+```
 
 ## Contribution
 
