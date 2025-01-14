@@ -1,65 +1,85 @@
 package com.example.models;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class Client {
-    private int idClient;
-    private String nom;
-    private String email;
-    private String telephone;
+    private final IntegerProperty idClient = new SimpleIntegerProperty();
+    private final StringProperty nom = new SimpleStringProperty();
+    private final StringProperty email = new SimpleStringProperty();
+    private final StringProperty telephone = new SimpleStringProperty();
+
 
     public Client() {
     }
     public Client(int idClient, String nom, String email, String telephone) {
-        this.idClient = idClient;
-        this.nom = nom;
-        this.email = email;
-        this.telephone = telephone;
+        this.idClient.set(idClient);
+        this.nom.set(nom);
+        this.email.set(email);
+        this.telephone.set(telephone);
     }
     public Client(String nom, String email, String telephone) {
-        this.nom = nom;
-        this.email = email;
-        this.telephone = telephone;
+        this.nom.set(nom);
+        this.email.set(email);
+        this.telephone.set(telephone);
     }
 
 
     public int getIdClient() {
-        return idClient;
+        return idClient.get();
     }
 
     public void setIdClient(int idClient) {
-        this.idClient = idClient;
+        this.idClient.set(idClient);
+    }
+    public IntegerProperty idClientProperty() {
+        return idClient;
     }
 
     public String getNom() {
-        return nom;
+        return nom.get();
     }
 
     public void setNom(String nom) {
-        this.nom = nom;
+        this.nom.set(nom);
+    }
+    public StringProperty nomProperty() {
+        return nom;
     }
 
+
     public String getEmail() {
-        return email;
+        return email.get();
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email.set(email);
+    }
+    public StringProperty emailProperty() {
+        return email;
     }
 
+
     public String getTelephone() {
-        return telephone;
+        return telephone.get();
     }
 
     public void setTelephone(String telephone) {
-        this.telephone = telephone;
+        this.telephone.set(telephone);
+    }
+    public StringProperty telephoneProperty() {
+        return telephone;
     }
 
     @Override
     public String toString() {
         return "Client{" +
-                "idClient=" + idClient +
-                ", nom='" + nom + '\'' +
-                ", email='" + email + '\'' +
-                ", telephone='" + telephone + '\'' +
+                "idClient=" + idClient.get() +
+                ", nom='" + nom.get() + '\'' +
+                ", email='" + email.get() + '\'' +
+                ", telephone='" + telephone.get() + '\'' +
                 '}';
     }
 }

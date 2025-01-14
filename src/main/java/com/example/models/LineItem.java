@@ -1,12 +1,17 @@
 package com.example.models;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 public class LineItem {
-    private int idLigne;
-    private int idProduct;
-    private int quantity;
-    private double sousTotal;
-    private int idFacture;
-    private int idCommande;
+    private final IntegerProperty idLigne = new SimpleIntegerProperty();
+    private final IntegerProperty idProduct = new SimpleIntegerProperty();
+    private final IntegerProperty quantity = new SimpleIntegerProperty();
+    private final DoubleProperty sousTotal = new SimpleDoubleProperty();
+    private final IntegerProperty idFacture = new SimpleIntegerProperty();
+    private final IntegerProperty idCommande = new SimpleIntegerProperty();
 
 
     public LineItem() {
@@ -14,102 +19,121 @@ public class LineItem {
 
 
     public LineItem(int idLigne, int idProduct, int quantity, double sousTotal, int idFacture) {
-        this.idLigne = idLigne;
-        this.idProduct = idProduct;
-        this.quantity = quantity;
-        this.sousTotal = sousTotal;
-        this.idFacture = idFacture;
+        this.idLigne.set(idLigne);
+        this.idProduct.set(idProduct);
+        this.quantity.set(quantity);
+        this.sousTotal.set(sousTotal);
+        this.idFacture.set(idFacture);
     }
 
 
     public LineItem(int idLigne, int idProduct, int quantity, double sousTotal, int idFacture, int idCommande) {
-        this.idLigne = idLigne;
-        this.idProduct = idProduct;
-        this.quantity = quantity;
-        this.sousTotal = sousTotal;
-        this.idFacture = idFacture;
-        this.idCommande = idCommande;
+        this.idLigne.set(idLigne);
+        this.idProduct.set(idProduct);
+        this.quantity.set(quantity);
+        this.sousTotal.set(sousTotal);
+        this.idFacture.set(idFacture);
+        this.idCommande.set(idCommande);
     }
     public LineItem(int idProduct, int quantity, double sousTotal, int idFacture) {
-        this.idProduct = idProduct;
-        this.quantity = quantity;
-        this.sousTotal = sousTotal;
-        this.idFacture = idFacture;
+        this.idProduct.set(idProduct);
+        this.quantity.set(quantity);
+        this.sousTotal.set(sousTotal);
+        this.idFacture.set(idFacture);
     }
 
     public LineItem(int idProduct, int quantity, double sousTotal, int idFacture, int idCommande) {
-        this.idProduct = idProduct;
-        this.quantity = quantity;
-        this.sousTotal = sousTotal;
-        this.idFacture = idFacture;
-        this.idCommande = idCommande;
+        this.idProduct.set(idProduct);
+        this.quantity.set(quantity);
+        this.sousTotal.set(sousTotal);
+        this.idFacture.set(idFacture);
+        this.idCommande.set(idCommande);
     }
 
 
     public LineItem(int idProduct, int quantity, double sousTotal) {
-        this.idProduct = idProduct;
-        this.quantity = quantity;
-        this.sousTotal = sousTotal;
+        this.idProduct.set(idProduct);
+        this.quantity.set(quantity);
+        this.sousTotal.set(sousTotal);
     }
 
     public int getIdLigne() {
-        return idLigne;
+        return idLigne.get();
     }
 
     public void setIdLigne(int idLigne) {
-        this.idLigne = idLigne;
+        this.idLigne.set(idLigne);
+    }
+    public IntegerProperty idLigneProperty() {
+        return idLigne;
     }
 
     public int getIdProduct() {
-        return idProduct;
+        return idProduct.get();
     }
 
     public void setIdProduct(int idProduct) {
-        this.idProduct = idProduct;
+        this.idProduct.set(idProduct);
+    }
+    public IntegerProperty idProductProperty() {
+        return idProduct;
     }
 
+
     public int getQuantity() {
-        return quantity;
+        return quantity.get();
     }
 
     public void setQuantity(int quantity) {
-        this.quantity = quantity;
+        this.quantity.set(quantity);
+    }
+    public IntegerProperty quantityProperty() {
+        return quantity;
     }
 
     public double getSousTotal() {
-        return sousTotal;
+        return sousTotal.get();
     }
 
     public void setSousTotal(double sousTotal) {
-        this.sousTotal = sousTotal;
+        this.sousTotal.set(sousTotal);
+    }
+    public DoubleProperty sousTotalProperty() {
+        return sousTotal;
     }
 
 
     public int getIdFacture() {
-        return idFacture;
+        return idFacture.get();
     }
 
     public void setIdFacture(int idFacture) {
-        this.idFacture = idFacture;
+        this.idFacture.set(idFacture);
+    }
+    public IntegerProperty idFactureProperty() {
+        return idFacture;
     }
 
     public int getIdCommande() {
-        return idCommande;
+        return idCommande.get();
     }
 
     public void setIdCommande(int idCommande) {
-        this.idCommande = idCommande;
+        this.idCommande.set(idCommande);
+    }
+    public IntegerProperty idCommandeProperty() {
+        return idCommande;
     }
 
     @Override
     public String toString() {
         return "LineItem{" +
-                "idLigne=" + idLigne +
-                ", idProduct=" + idProduct +
-                ", quantity=" + quantity +
-                ", sousTotal=" + sousTotal +
-                ", idFacture=" + idFacture +
-                ", idCommande=" + idCommande +
+                "idLigne=" + idLigne.get() +
+                ", idProduct=" + idProduct.get() +
+                ", quantity=" + quantity.get() +
+                ", sousTotal=" + sousTotal.get() +
+                ", idFacture=" + idFacture.get() +
+                ", idCommande=" + idCommande.get() +
                 '}';
     }
 }

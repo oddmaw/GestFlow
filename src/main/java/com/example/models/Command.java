@@ -1,12 +1,14 @@
 package com.example.models;
 
+import javafx.beans.property.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class Command {
-    private int idCommande;
-    private LocalDateTime date;
-    private int idClient;
+    private final IntegerProperty idCommande = new SimpleIntegerProperty();
+    private final ObjectProperty<LocalDateTime> date = new SimpleObjectProperty<>();
+    private final IntegerProperty idClient = new SimpleIntegerProperty();
     private List<LineItem> lineItems;
 
 
@@ -15,42 +17,52 @@ public class Command {
 
 
     public Command(int idCommande, LocalDateTime date, int idClient, List<LineItem> lineItems) {
-        this.idCommande = idCommande;
-        this.date = date;
-        this.idClient = idClient;
+        this.idCommande.set(idCommande);
+        this.date.set(date);
+        this.idClient.set(idClient);
         this.lineItems = lineItems;
     }
 
 
     public Command(LocalDateTime date, int idClient, List<LineItem> lineItems) {
-        this.date = date;
-        this.idClient = idClient;
+        this.date.set(date);
+        this.idClient.set(idClient);
         this.lineItems = lineItems;
     }
 
     public int getIdCommande() {
-        return idCommande;
+        return idCommande.get();
     }
 
     public void setIdCommande(int idCommande) {
-        this.idCommande = idCommande;
+        this.idCommande.set(idCommande);
+    }
+    public IntegerProperty idCommandeProperty() {
+        return idCommande;
     }
 
     public LocalDateTime getDate() {
-        return date;
+        return date.get();
     }
 
     public void setDate(LocalDateTime date) {
-        this.date = date;
+        this.date.set(date);
+    }
+    public ObjectProperty<LocalDateTime> dateProperty() {
+        return date;
     }
 
     public int getIdClient() {
-        return idClient;
+        return idClient.get();
     }
 
     public void setIdClient(int idClient) {
-        this.idClient = idClient;
+        this.idClient.set(idClient);
     }
+    public IntegerProperty idClientProperty() {
+        return idClient;
+    }
+
 
     public List<LineItem> getLineItems() {
         return lineItems;
@@ -63,9 +75,9 @@ public class Command {
     @Override
     public String toString() {
         return "Command{" +
-                "idCommande=" + idCommande +
-                ", date=" + date +
-                ", idClient=" + idClient +
+                "idCommande=" + idCommande.get() +
+                ", date=" + date.get() +
+                ", idClient=" + idClient.get() +
                 ", lineItems=" + lineItems +
                 '}';
     }
