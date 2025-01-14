@@ -61,6 +61,43 @@ public class CommandDAO {
             }
         }
     }
+    public int updateCommand(Command command) throws SQLException {
+        String query = "UPDATE commandes SET idClient = ? WHERE id = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, command.getIdClient());
+            statement.setInt(2, command.getIdClient());
+
+            int affectedRows = statement.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Updating command failed, no rows affected.");
+            }
+
+            // Update line items
+            if (command.getLineItems() != null && !command.getLineItems().isEmpty()) {
+                // Remove old line items first (if needed)
+                deleteLineItemsByCommandId(command.getIdClient());
+
+                // Add updated line items
+                for (LineItem lineItem : command.getLineItems()) {
+                    addLineItem(lineItem, command.getIdClient());
+                }
+            }
+
+            return affectedRows;
+        }
+    }
+
+    private void deleteLineItemsByCommandId(int commandId) throws SQLException {
+        String deleteQuery = "DELETE FROM lignes_commande WHERE idCommande = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(deleteQuery)) {
+            statement.setInt(1, commandId);
+            statement.executeUpdate();
+        }
+    }
+
     private int addLineItem(LineItem lineItem, int commandId) throws SQLException {
         String query = "INSERT INTO lignes_commande (idCommande, idProduit, quantite, sousTotal) VALUES (?, ?, ?, ?)";
         try(Connection connection = DatabaseConnection.getConnection();

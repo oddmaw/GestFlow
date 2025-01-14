@@ -94,6 +94,45 @@ public class InvoiceDAO {
         }
     }
 
+    public int updateInvoice(Invoice invoice) throws SQLException {
+        String query = "UPDATE factures SET date = ?, montantTotal = ?, idClient = ? WHERE idFacture = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setObject(1, invoice.getDate()); // Assuming 'date' is of type LocalDateTime
+            statement.setDouble(2, invoice.getMontantTotal());
+            statement.setInt(3, invoice.getIdClient());
+            statement.setInt(4, invoice.getIdFacture()); // Assuming invoice has 'idFacture'
+
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Updating invoice failed, no rows affected.");
+            }
+
+            deleteLineItemsByInvoiceId(invoice.getIdFacture());
+
+            if (invoice.getLineItems() != null && !invoice.getLineItems().isEmpty()) {
+                for (LineItem lineItem : invoice.getLineItems()) {
+                    addLineItem(lineItem, invoice.getIdFacture());
+                }
+            }
+
+            return affectedRows;
+        }
+    }
+
+    public int deleteLineItemsByInvoiceId(int id) throws SQLException {
+        String query = "DELETE FROM lignes_facture WHERE idFacture = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, id);
+
+            int affectedRows = statement.executeUpdate();
+            return affectedRows;
+        }
+    }
+
     private int addLineItem(LineItem lineItem, int invoiceId) throws SQLException {
         String query = "INSERT INTO lignes_facture (idFacture, idProduit, quantite, sousTotal) VALUES (?, ?, ?, ?)";
         try (Connection connection = DatabaseConnection.getConnection();

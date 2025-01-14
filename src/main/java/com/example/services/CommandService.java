@@ -21,6 +21,9 @@ public class CommandService {
     public int addCommand(Command command) throws SQLException {
         return commandDAO.addCommand(command);
     }
+    public int updateCommand(Command command) throws SQLException {
+        return commandDAO.updateCommand(command);
+    }
     public int deleteCommand(int id) throws SQLException {
         return commandDAO.deleteCommand(id);
     }

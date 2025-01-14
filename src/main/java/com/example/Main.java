@@ -55,9 +55,28 @@ public class Main extends Application {
         ListView<Client> clientListView = new ListView<>(clients);
         Button loadClientsButton = new Button("Load Clients");
         loadClientsButton.setOnAction(event -> loadClients());
+
+        TextField clientNameField = new TextField();
+        clientNameField.setPromptText("Client Name");
+        TextField clientEmailField = new TextField();
+        clientEmailField.setPromptText("Client Email");
+        TextField phoneField = new TextField();
+        phoneField.setPromptText("Client Phone");
+
         Button addClientButton = new Button("Add Client");
-        addClientButton.setOnAction(event -> addClient());
-        clientLayout.getChildren().addAll(clientListView, loadClientsButton, addClientButton);
+        addClientButton.setOnAction(event -> addClient(clientNameField.getText(), clientEmailField.getText(), phoneField.getText()));
+
+        // CRUD buttons for Clients
+        HBox clientCRUDButtons = new HBox(10);
+        Button updateClientButton = new Button("Update Client");
+        updateClientButton.setOnAction(event -> updateClient(clientListView.getSelectionModel().getSelectedItem()));
+
+        Button deleteClientButton = new Button("Delete Client");
+        deleteClientButton.setOnAction(event -> deleteClient(clientListView.getSelectionModel().getSelectedItem()));
+
+        clientCRUDButtons.getChildren().addAll(updateClientButton, deleteClientButton);
+
+        clientLayout.getChildren().addAll(clientListView, loadClientsButton, clientNameField, clientEmailField, phoneField, addClientButton, clientCRUDButtons);
         clientsTab.setContent(clientLayout);
 
         // Commands Tab
@@ -65,9 +84,23 @@ public class Main extends Application {
         ListView<Command> commandListView = new ListView<>(commands);
         Button loadCommandsButton = new Button("Load Commands");
         loadCommandsButton.setOnAction(event -> loadCommands());
+
+        TextField commandClientIdField = new TextField();
+        commandClientIdField.setPromptText("Client ID");
+
         Button addCommandButton = new Button("Add Command");
-        addCommandButton.setOnAction(event -> addCommand());
-        commandLayout.getChildren().addAll(commandListView, loadCommandsButton, addCommandButton);
+        addCommandButton.setOnAction(event -> addCommand(commandClientIdField.getText()));
+
+        HBox commandCRUDButtons = new HBox(10);
+        Button updateCommandButton = new Button("Update Command");
+        updateCommandButton.setOnAction(event -> updateCommand(commandListView.getSelectionModel().getSelectedItem()));
+
+        Button deleteCommandButton = new Button("Delete Command");
+        deleteCommandButton.setOnAction(event -> deleteCommand(commandListView.getSelectionModel().getSelectedItem()));
+
+        commandCRUDButtons.getChildren().addAll(updateCommandButton, deleteCommandButton);
+
+        commandLayout.getChildren().addAll(commandListView, loadCommandsButton, commandClientIdField, addCommandButton, commandCRUDButtons);
         commandsTab.setContent(commandLayout);
 
         // Invoices Tab
@@ -75,9 +108,23 @@ public class Main extends Application {
         ListView<Invoice> invoiceListView = new ListView<>(invoices);
         Button loadInvoicesButton = new Button("Load Invoices");
         loadInvoicesButton.setOnAction(event -> loadInvoices());
+
+        TextField invoiceAmountField = new TextField();
+        invoiceAmountField.setPromptText("Invoice Amount");
+
         Button addInvoiceButton = new Button("Add Invoice");
-        addInvoiceButton.setOnAction(event -> addInvoice());
-        invoiceLayout.getChildren().addAll(invoiceListView, loadInvoicesButton, addInvoiceButton);
+        addInvoiceButton.setOnAction(event -> addInvoice(invoiceAmountField.getText()));
+
+        HBox invoiceCRUDButtons = new HBox(10);
+        Button updateInvoiceButton = new Button("Update Invoice");
+        updateInvoiceButton.setOnAction(event -> updateInvoice(invoiceListView.getSelectionModel().getSelectedItem()));
+
+        Button deleteInvoiceButton = new Button("Delete Invoice");
+        deleteInvoiceButton.setOnAction(event -> deleteInvoice(invoiceListView.getSelectionModel().getSelectedItem()));
+
+        invoiceCRUDButtons.getChildren().addAll(updateInvoiceButton, deleteInvoiceButton);
+
+        invoiceLayout.getChildren().addAll(invoiceListView, loadInvoicesButton, invoiceAmountField, addInvoiceButton, invoiceCRUDButtons);
         invoicesTab.setContent(invoiceLayout);
 
         // Products Tab
@@ -85,9 +132,25 @@ public class Main extends Application {
         ListView<Product> productListView = new ListView<>(products);
         Button loadProductsButton = new Button("Load Products");
         loadProductsButton.setOnAction(event -> loadProducts());
+
+        TextField productNameField = new TextField();
+        productNameField.setPromptText("Product Name");
+        TextField productPriceField = new TextField();
+        productPriceField.setPromptText("Product Price");
+
         Button addProductButton = new Button("Add Product");
-        addProductButton.setOnAction(event -> addProduct());
-        productLayout.getChildren().addAll(productListView, loadProductsButton, addProductButton);
+        addProductButton.setOnAction(event -> addProduct(productNameField.getText(), productPriceField.getText()));
+
+        HBox productCRUDButtons = new HBox(10);
+        Button updateProductButton = new Button("Update Product");
+        updateProductButton.setOnAction(event -> updateProduct(productListView.getSelectionModel().getSelectedItem()));
+
+        Button deleteProductButton = new Button("Delete Product");
+        deleteProductButton.setOnAction(event -> deleteProduct(productListView.getSelectionModel().getSelectedItem()));
+
+        productCRUDButtons.getChildren().addAll(updateProductButton, deleteProductButton);
+
+        productLayout.getChildren().addAll(productListView, loadProductsButton, productNameField, productPriceField, addProductButton, productCRUDButtons);
         productsTab.setContent(productLayout);
 
         // Scene and Stage
@@ -97,7 +160,7 @@ public class Main extends Application {
         stage.show();
     }
 
-    // Load clients from the database
+    // Client CRUD operations
     private void loadClients() {
         try {
             List<Client> clientList = clientService.getAllClients();
@@ -107,9 +170,8 @@ public class Main extends Application {
         }
     }
 
-    // Add a new client (for simplicity, we are using hardcoded values)
-    private void addClient() {
-        Client client = new Client("John Doe", "john@example.com", "0606963061");
+    private void addClient(String name, String email, String telephone) {
+        Client client = new Client(name, email, telephone);
         try {
             clientService.addClient(client);
             loadClients();
@@ -118,7 +180,29 @@ public class Main extends Application {
         }
     }
 
-    // Load commands from the database
+    private void updateClient(Client client) {
+        if (client != null) {
+            try {
+                clientService.updateClient(client);
+                loadClients();
+            } catch (SQLException e) {
+                showError("Error updating client", e.getMessage());
+            }
+        }
+    }
+
+    private void deleteClient(Client client) {
+        if (client != null) {
+            try {
+                clientService.deleteClient(client.getIdClient());
+                loadClients();
+            } catch (SQLException e) {
+                showError("Error deleting client", e.getMessage());
+            }
+        }
+    }
+
+    // Command CRUD operations
     private void loadCommands() {
         try {
             List<Command> commandList = commandService.getAllCommands();
@@ -128,9 +212,8 @@ public class Main extends Application {
         }
     }
 
-    // Add a new command (for simplicity, we are using hardcoded values)
-    private void addCommand() {
-        Command command = new Command(LocalDateTime.now(), 1, FXCollections.observableArrayList());
+    private void addCommand(String clientId) {
+        Command command = new Command(LocalDateTime.now(), Integer.parseInt(clientId), FXCollections.observableArrayList());
         try {
             commandService.addCommand(command);
             loadCommands();
@@ -139,7 +222,29 @@ public class Main extends Application {
         }
     }
 
-    // Load invoices from the database
+    private void updateCommand(Command command) {
+        if (command != null) {
+            try {
+                commandService.updateCommand(command);
+                loadCommands();
+            } catch (SQLException e) {
+                showError("Error updating command", e.getMessage());
+            }
+        }
+    }
+
+    private void deleteCommand(Command command) {
+        if (command != null) {
+            try {
+                commandService.deleteCommand(command.getIdClient());
+                loadCommands();
+            } catch (SQLException e) {
+                showError("Error deleting command", e.getMessage());
+            }
+        }
+    }
+
+    // Invoice CRUD operations
     private void loadInvoices() {
         try {
             List<Invoice> invoiceList = invoiceService.getAllInvoices();
@@ -149,9 +254,8 @@ public class Main extends Application {
         }
     }
 
-    // Add a new invoice (for simplicity, we are using hardcoded values)
-    private void addInvoice() {
-        Invoice invoice = new Invoice(LocalDateTime.now(), 100.0, 1, List.of());
+    private void addInvoice(String amount) {
+        Invoice invoice = new Invoice(LocalDateTime.now(), Double.parseDouble(amount), 1, List.of());
         try {
             invoiceService.addInvoice(invoice);
             loadInvoices();
@@ -160,7 +264,29 @@ public class Main extends Application {
         }
     }
 
-    // Load products from the database
+    private void updateInvoice(Invoice invoice) {
+        if (invoice != null) {
+            try {
+                invoiceService.updateInvoice(invoice);
+                loadInvoices();
+            } catch (SQLException e) {
+                showError("Error updating invoice", e.getMessage());
+            }
+        }
+    }
+
+    private void deleteInvoice(Invoice invoice) {
+        if (invoice != null) {
+            try {
+                invoiceService.deleteInvoice(invoice.getIdClient());
+                loadInvoices();
+            } catch (SQLException e) {
+                showError("Error deleting invoice", e.getMessage());
+            }
+        }
+    }
+
+    // Product CRUD operations
     private void loadProducts() {
         try {
             List<Product> productList = productService.getAllProducts();
@@ -170,14 +296,35 @@ public class Main extends Application {
         }
     }
 
-    // Add a new product (for simplicity, we are using hardcoded values)
-    private void addProduct() {
-        Product product = new Product("Product 1", 19.99, 10);
+    private void addProduct(String name, String price) {
+        Product product = new Product(name, Double.parseDouble(price), 1);
         try {
             productService.addProduct(product);
             loadProducts();
         } catch (SQLException e) {
             showError("Error adding product", e.getMessage());
+        }
+    }
+
+    private void updateProduct(Product product) {
+        if (product != null) {
+            try {
+                productService.updateProduct(product);
+                loadProducts();
+            } catch (SQLException e) {
+                showError("Error updating product", e.getMessage());
+            }
+        }
+    }
+
+    private void deleteProduct(Product product) {
+        if (product != null) {
+            try {
+                productService.deleteProduct(product.getIdProduit());
+                loadProducts();
+            } catch (SQLException e) {
+                showError("Error deleting product", e.getMessage());
+            }
         }
     }
 

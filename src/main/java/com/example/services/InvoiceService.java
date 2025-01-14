@@ -15,6 +15,9 @@ public class InvoiceService {
     public Invoice getInvoiceById(int id) throws SQLException {
         return invoiceDAO.getInvoiceById(id);
     }
+    public int updateInvoice(Invoice invoice) throws SQLException {
+        return invoiceDAO.updateInvoice(invoice);
+    }
     public List<Invoice> getAllInvoices() throws SQLException {
         return invoiceDAO.getAllInvoices();
     }
