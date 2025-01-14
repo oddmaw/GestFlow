@@ -1,0 +1,90 @@
+/* style.css */
+
+/* General theme */
+.root {
+    -fx-background-color: #2d3436; /* Dark background */
+    -fx-font-family: "Arial";
+}
+
+/* Tab Pane */
+.tab-pane *.tab-header-background {
+    -fx-background-color: #424949;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: #424949; /* Darker background for tab header */
+}
+
+.tab {
+    -fx-background-color: #424949; /* Dark color for tab */
+}
+
+.tab:selected {
+    -fx-background-color: #3498db; /* Highlight when selected */
+}
+
+.tab-label {
+    -fx-text-fill: white;
+}
+
+/* TableView */
+.table-view {
+    -fx-background-color: #353b48;
+    -fx-control-inner-background: #353b48;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-border-color: #34495e; /* Added border color */
+    -fx-border-width: 1;
+}
+
+.table-view .column-header-background .filler {
+    -fx-background-color: #424949; /* Darker column headers */
+}
+
+.table-view .column-header {
+    -fx-background-color: #424949; /* Darker column headers */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.table-view .table-row-cell:even {
+    -fx-background-color: #424949; /* Alternate row color for better readability */
+    -fx-text-fill: white;
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: #353b48;
+    -fx-text-fill: white;
+}
+
+.table-view .table-cell {
+    -fx-text-fill: white;
+}
+
+/* TextField */
+.text-field {
+    -fx-background-color: #424949;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #bdc3c7;
+    -fx-font-size: 14px;
+    -fx-border-color: #34495e; /* Added border color */
+    -fx-border-width: 1;
+}
+
+/* Button */
+.button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 5 10 5 10;
+}
+
+.button:hover {
+    -fx-background-color: #2980b9;
+}
+
+/* Label */
+.label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+}
