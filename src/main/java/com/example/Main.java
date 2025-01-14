@@ -53,8 +53,6 @@ public class Main extends Application {
         // Clients Tab
         VBox clientLayout = new VBox(10);
         ListView<Client> clientListView = new ListView<>(clients);
-        Button loadClientsButton = new Button("Load Clients");
-        loadClientsButton.setOnAction(event -> loadClients());
 
         TextField clientNameField = new TextField();
         clientNameField.setPromptText("Client Name");
@@ -76,14 +74,12 @@ public class Main extends Application {
 
         clientCRUDButtons.getChildren().addAll(updateClientButton, deleteClientButton);
 
-        clientLayout.getChildren().addAll(clientListView, loadClientsButton, clientNameField, clientEmailField, phoneField, addClientButton, clientCRUDButtons);
+        clientLayout.getChildren().addAll(clientListView, clientNameField, clientEmailField, phoneField, addClientButton, clientCRUDButtons);
         clientsTab.setContent(clientLayout);
 
         // Commands Tab
         VBox commandLayout = new VBox(10);
         ListView<Command> commandListView = new ListView<>(commands);
-        Button loadCommandsButton = new Button("Load Commands");
-        loadCommandsButton.setOnAction(event -> loadCommands());
 
         TextField commandClientIdField = new TextField();
         commandClientIdField.setPromptText("Client ID");
@@ -100,14 +96,12 @@ public class Main extends Application {
 
         commandCRUDButtons.getChildren().addAll(updateCommandButton, deleteCommandButton);
 
-        commandLayout.getChildren().addAll(commandListView, loadCommandsButton, commandClientIdField, addCommandButton, commandCRUDButtons);
+        commandLayout.getChildren().addAll(commandListView, commandClientIdField, addCommandButton, commandCRUDButtons);
         commandsTab.setContent(commandLayout);
 
         // Invoices Tab
         VBox invoiceLayout = new VBox(10);
         ListView<Invoice> invoiceListView = new ListView<>(invoices);
-        Button loadInvoicesButton = new Button("Load Invoices");
-        loadInvoicesButton.setOnAction(event -> loadInvoices());
 
         TextField invoiceAmountField = new TextField();
         invoiceAmountField.setPromptText("Invoice Amount");
@@ -124,14 +118,12 @@ public class Main extends Application {
 
         invoiceCRUDButtons.getChildren().addAll(updateInvoiceButton, deleteInvoiceButton);
 
-        invoiceLayout.getChildren().addAll(invoiceListView, loadInvoicesButton, invoiceAmountField, addInvoiceButton, invoiceCRUDButtons);
+        invoiceLayout.getChildren().addAll(invoiceListView, invoiceAmountField, addInvoiceButton, invoiceCRUDButtons);
         invoicesTab.setContent(invoiceLayout);
 
         // Products Tab
         VBox productLayout = new VBox(10);
         ListView<Product> productListView = new ListView<>(products);
-        Button loadProductsButton = new Button("Load Products");
-        loadProductsButton.setOnAction(event -> loadProducts());
 
         TextField productNameField = new TextField();
         productNameField.setPromptText("Product Name");
@@ -150,7 +142,7 @@ public class Main extends Application {
 
         productCRUDButtons.getChildren().addAll(updateProductButton, deleteProductButton);
 
-        productLayout.getChildren().addAll(productListView, loadProductsButton, productNameField, productPriceField, addProductButton, productCRUDButtons);
+        productLayout.getChildren().addAll(productListView, productNameField, productPriceField, addProductButton, productCRUDButtons);
         productsTab.setContent(productLayout);
 
         // Scene and Stage
@@ -158,6 +150,12 @@ public class Main extends Application {
         stage.setTitle("JavaFX CRUD Application");
         stage.setScene(scene);
         stage.show();
+
+        // Initial load of data
+        loadClients();
+        loadCommands();
+        loadInvoices();
+        loadProducts();
     }
 
     // Client CRUD operations
@@ -297,7 +295,7 @@ public class Main extends Application {
     }
 
     private void addProduct(String name, String price) {
-        Product product = new Product(name, Double.parseDouble(price), 1);
+        Product product = new Product(name, Double.parseDouble(price));
         try {
             productService.addProduct(product);
             loadProducts();
@@ -320,7 +318,7 @@ public class Main extends Application {
     private void deleteProduct(Product product) {
         if (product != null) {
             try {
-                productService.deleteProduct(product.getIdProduit());
+                productService.deleteProduct(product.getId());
                 loadProducts();
             } catch (SQLException e) {
                 showError("Error deleting product", e.getMessage());
@@ -328,7 +326,6 @@ public class Main extends Application {
         }
     }
 
-    // Helper function to display error messages
     private void showError(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
