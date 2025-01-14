@@ -10,11 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommandDAO {
-    public CommandDAO() {
+    private final DatabaseConnection dbConnection;
+
+    public CommandDAO(DatabaseConnection dbConnection) {
+        this.dbConnection = dbConnection;
     }
     public Command getCommandById(int id) throws SQLException {
         String query = "SELECT * FROM commandes WHERE idCommande = ?";
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = dbConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
             try(ResultSet resultSet = statement.executeQuery()){
@@ -28,7 +31,7 @@ public class CommandDAO {
     public List<Command> getAllCommands() throws SQLException {
         List<Command> commands = new ArrayList<>();
         String query = "SELECT * FROM commandes";
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = dbConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query)) {
             while (resultSet.next()) {
@@ -39,7 +42,7 @@ public class CommandDAO {
     }
     public int addCommand(Command command) throws SQLException {
         String query = "INSERT INTO commandes (idClient) VALUES (?)";
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = dbConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, command.getIdClient());
             int affectedRows = statement.executeUpdate();
@@ -51,7 +54,7 @@ public class CommandDAO {
                     int commandId = generatedKeys.getInt(1);
                     if(command.getLineItems() != null && !command.getLineItems().isEmpty()){
                         for (LineItem lineItem : command.getLineItems()){
-                            addLineItem(lineItem, commandId);
+                            addLineItem(lineItem, commandId, connection);
                         }
                     }
                     return affectedRows;
@@ -61,10 +64,9 @@ public class CommandDAO {
             }
         }
     }
-    private int addLineItem(LineItem lineItem, int commandId) throws SQLException {
+    private int addLineItem(LineItem lineItem, int commandId, Connection connection) throws SQLException {
         String query = "INSERT INTO lignes_commande (idCommande, idProduit, quantite, sousTotal) VALUES (?, ?, ?, ?)";
-        try(Connection connection = DatabaseConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement(query)){
+        try(PreparedStatement statement = connection.prepareStatement(query)){
             statement.setInt(1, commandId);
             statement.setInt(2, lineItem.getIdProduct());
             statement.setInt(3, lineItem.getQuantity());
@@ -75,7 +77,7 @@ public class CommandDAO {
     public int deleteCommand(int id) throws SQLException {
         String deleteLineItemsQuery = "DELETE FROM lignes_commande WHERE idCommande = ?";
         String deleteCommandQuery = "DELETE FROM commandes WHERE idCommande = ?";
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = dbConnection.getConnection();
              PreparedStatement deleteLineItemsStatement = connection.prepareStatement(deleteLineItemsQuery);
              PreparedStatement deleteCommandStatement = connection.prepareStatement(deleteCommandQuery)) {
 

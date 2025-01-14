@@ -7,14 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDAO {
+    private final DatabaseConnection dbConnection;
 
-
-    public ProductDAO() {
+    public ProductDAO(DatabaseConnection dbConnection) {
+        this.dbConnection = dbConnection;
     }
-
     public Product getProductById(int id) throws SQLException {
         String query = "SELECT * FROM products WHERE idProduit = ?";
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = dbConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
             try(ResultSet resultSet = statement.executeQuery()){
@@ -29,7 +29,7 @@ public class ProductDAO {
     public List<Product> getAllProducts() throws SQLException {
         List<Product> products = new ArrayList<>();
         String query = "SELECT * FROM products";
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = dbConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query)) {
             while (resultSet.next()) {
@@ -41,7 +41,7 @@ public class ProductDAO {
 
     public int addProduct(Product product) throws SQLException {
         String query = "INSERT INTO products (nom, prix, quantiteEnStock) VALUES (?, ?, ?)";
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = dbConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, product.getNom());
             statement.setDouble(2, product.getPrix());
@@ -52,7 +52,7 @@ public class ProductDAO {
 
     public int updateProduct(Product product) throws SQLException {
         String query = "UPDATE products SET nom = ?, prix = ?, quantiteEnStock = ? WHERE idProduit = ?";
-        try(Connection connection = DatabaseConnection.getConnection();
+        try(Connection connection = dbConnection.getConnection();
             PreparedStatement statement = connection.prepareStatement(query)){
             statement.setString(1, product.getNom());
             statement.setDouble(2, product.getPrix());
@@ -65,7 +65,7 @@ public class ProductDAO {
 
     public int deleteProduct(int id) throws SQLException {
         String query = "DELETE FROM products WHERE idProduit = ?";
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = dbConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
             return statement.executeUpdate();

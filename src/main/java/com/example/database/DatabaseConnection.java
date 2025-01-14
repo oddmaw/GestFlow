@@ -5,25 +5,28 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/company_db";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "";
-    private static Connection connection;
+    private final String DB_URL;
+    private final String DB_USER;
+    private final String DB_PASSWORD;
 
-    public static Connection getConnection() throws SQLException {
-        if (connection == null || connection.isClosed()) {
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-            } catch (ClassNotFoundException e) {
-                System.err.println("MySQL JDBC driver not found.");
-                throw new SQLException(e);
-            }
-        }
-        return connection;
+    public DatabaseConnection(String dbUrl, String dbUser, String dbPassword) {
+        this.DB_URL = dbUrl;
+        this.DB_USER = dbUser;
+        this.DB_PASSWORD = dbPassword;
     }
 
-    public static void closeConnection() throws SQLException {
+    public Connection getConnection() throws SQLException {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+        } catch (ClassNotFoundException e) {
+            System.err.println("MySQL JDBC driver not found.");
+            throw new SQLException(e);
+        }
+
+    }
+
+    public void closeConnection(Connection connection) throws SQLException {
         if (connection != null && !connection.isClosed()) {
             connection.close();
         }

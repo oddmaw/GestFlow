@@ -12,15 +12,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InvoiceDAO {
-    public InvoiceDAO() {
-    }
+    private final DatabaseConnection dbConnection;
 
+    public InvoiceDAO(DatabaseConnection dbConnection) {
+        this.dbConnection = dbConnection;
+    }
     public Invoice getInvoiceById(int id) throws SQLException {
         String query = "SELECT f.*, lf.idLigne, lf.idProduit, lf.quantite, lf.sousTotal " +
                 "FROM factures f LEFT JOIN lignes_facture lf ON f.idFacture = lf.idFacture " +
                 "WHERE f.idFacture = ?";
         Invoice invoice = null;
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = dbConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -45,7 +47,7 @@ public class InvoiceDAO {
                 "FROM factures f LEFT JOIN lignes_facture lf ON f.idFacture = lf.idFacture";
         Map<Integer, Invoice> invoiceMap = new HashMap<>();
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = dbConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query)) {
             while (resultSet.next()) {
@@ -69,7 +71,7 @@ public class InvoiceDAO {
 
     public int addInvoice(Invoice invoice) throws SQLException {
         String query = "INSERT INTO factures (date, montantTotal, idClient) VALUES (?, ?, ?)";
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = dbConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setObject(1, invoice.getDate());
             statement.setDouble(2, invoice.getMontantTotal());
@@ -83,7 +85,7 @@ public class InvoiceDAO {
                     int invoiceId = generatedKeys.getInt(1);
                     if (invoice.getLineItems() != null && !invoice.getLineItems().isEmpty()) {
                         for (LineItem lineItem : invoice.getLineItems()) {
-                            addLineItem(lineItem, invoiceId);
+                            addLineItem(lineItem, invoiceId, connection);
                         }
                     }
                     return invoiceId;
@@ -94,10 +96,9 @@ public class InvoiceDAO {
         }
     }
 
-    private int addLineItem(LineItem lineItem, int invoiceId) throws SQLException {
+    private int addLineItem(LineItem lineItem, int invoiceId, Connection connection) throws SQLException {
         String query = "INSERT INTO lignes_facture (idFacture, idProduit, quantite, sousTotal) VALUES (?, ?, ?, ?)";
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, invoiceId);
             statement.setInt(2, lineItem.getIdProduct());
             statement.setInt(3, lineItem.getQuantity());
@@ -117,7 +118,7 @@ public class InvoiceDAO {
     public int deleteInvoice(int id) throws SQLException {
         Connection connection = null;
         try {
-            connection = DatabaseConnection.getConnection();
+            connection = dbConnection.getConnection();
             connection.setAutoCommit(false);
             deleteLineItemsByInvoiceId(connection, id);
             String query = "DELETE FROM factures WHERE idFacture = ?";
@@ -140,7 +141,7 @@ public class InvoiceDAO {
             if (connection != null) {
                 try {
                     connection.setAutoCommit(true);
-                    connection.close();
+                    dbConnection.closeConnection(connection);
                 } catch (SQLException closeException) {
                     closeException.printStackTrace();
                 }

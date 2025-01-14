@@ -5,16 +5,17 @@ import com.example.models.Client;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+//The main idea here is that we are injecting the Database Connection into the DAO's using the constructor
 public class ClientDAO {
 
+    private final DatabaseConnection dbConnection;
 
-    public ClientDAO() {
+    public ClientDAO(DatabaseConnection dbConnection) {
+        this.dbConnection = dbConnection;
     }
-
     public Client getClientById(int id) throws SQLException {
         String query = "SELECT * FROM clients WHERE idClient = ?";
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = dbConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
             try(ResultSet resultSet = statement.executeQuery()){
@@ -23,14 +24,13 @@ public class ClientDAO {
                 }
                 return null;
             }
-
         }
     }
 
     public List<Client> getAllClients() throws SQLException {
         List<Client> clients = new ArrayList<>();
         String query = "SELECT * FROM clients";
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = dbConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query)) {
             while (resultSet.next()) {
@@ -42,7 +42,7 @@ public class ClientDAO {
 
     public int addClient(Client client) throws SQLException {
         String query = "INSERT INTO clients (nom, email, telephone) VALUES (?, ?, ?)";
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = dbConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)){
             statement.setString(1, client.getNom());
             statement.setString(2, client.getEmail());
@@ -53,7 +53,7 @@ public class ClientDAO {
 
     public int updateClient(Client client) throws SQLException {
         String query = "UPDATE clients SET nom = ?, email = ?, telephone = ? WHERE idClient = ?";
-        try(Connection connection = DatabaseConnection.getConnection();
+        try(Connection connection = dbConnection.getConnection();
             PreparedStatement statement = connection.prepareStatement(query)){
             statement.setString(1, client.getNom());
             statement.setString(2, client.getEmail());
@@ -65,7 +65,7 @@ public class ClientDAO {
 
     public int deleteClient(int id) throws SQLException {
         String query = "DELETE FROM clients WHERE idClient = ?";
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection = dbConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
             return statement.executeUpdate();
