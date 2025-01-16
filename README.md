@@ -1,8 +1,11 @@
-# GestFlow: Order Management System (Made by Mohamed Khalis & Ayman Zaabool)
+# GestFlow: Order Management System 
+(Made by [OddMaw Ayman](https://github.com/oddmaw) & [Mohamed Khalis](https://github.com/Admiral-Simo) )
 
 ## Project Overview
 
 This project is a desktop application designed to manage orders and invoices. It allows users to keep track of their products, clients, sales invoices, and internal product requests (commands/orders). The application is built using Java and a MySQL database for data persistence.
+
+
 
 ## Key Features
 
